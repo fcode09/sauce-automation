@@ -1,0 +1,47 @@
+{
+  "name": "sauce-automation",
+  "version": "1.0.0",
+  "description": "Automated web interaction bot for SauceDemo using Puppeteer and TypeScript. Simulates user flows including login, product selection, and checkout.",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "scripts": {
+    "dev": "nodemon --watch src --ext ts --exec ts-node -r tsconfig-paths/register src/index.ts",
+    "build": "tsc && tsc-alias",
+    "start": "node dist/index.js",
+    "lint": "eslint --ext .ts src",
+    "format": "prettier --write .",
+    "test": "npm run test:login && npm run test:purchase",
+    "test:login": "ts-node -r tsconfig-paths/register src/tests/login.smoke.ts",
+    "test:purchase": "ts-node -r tsconfig-paths/register src/tests/purchase.smoke.ts"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/fcode09/sauce-automation.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "bugs": {
+    "url": "https://github.com/fcode09/sauce-automation/issues"
+  },
+  "homepage": "https://github.com/fcode09/sauce-automation#readme",
+  "dependencies": {
+    "dotenv": "^17.3.1",
+    "puppeteer": "^24.37.5"
+  },
+  "devDependencies": {
+    "@types/node": "^25.3.3",
+    "@typescript-eslint/eslint-plugin": "^8.56.1",
+    "@typescript-eslint/parser": "^8.56.1",
+    "eslint": "^10.0.2",
+    "eslint-config-prettier": "^10.1.8",
+    "eslint-plugin-prettier": "^5.5.5",
+    "nodemon": "^3.1.14",
+    "prettier": "^3.8.1",
+    "ts-node": "^10.9.2",
+    "tsc-alias": "^1.8.16",
+    "tsconfig-paths": "^4.2.0",
+    "typescript": "^5.9.3"
+  }
+}
