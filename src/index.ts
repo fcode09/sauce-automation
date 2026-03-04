@@ -1,9 +1,11 @@
 import { BrowserManager } from '@core/BrowserManager';
 import { LoginPage } from '@pages/LoginPage';
 import { env } from '@config/env';
+import { PurchaseFlow } from '@flows/PurchaseFlow';
 import { mkdir } from 'node:fs/promises';
 import path from 'node:path';
 import { Page } from 'puppeteer';
+import { DEFAULT_CHECKOUT_INFO, DEFAULT_PRODUCT_NAME } from './types';
 
 /**
  * Formats timestamps as `YYYYMMDD-HHmmss` to keep artifact names sortable.
@@ -35,7 +37,7 @@ async function captureErrorScreenshot(page: Page): Promise<void> {
 /**
  * Application entrypoint:
  * - initialize browser
- * - run login flow
+ * - run login and full purchase flow
  * - collect diagnostics on failure
  * - always close resources
  */
@@ -48,11 +50,18 @@ async function bootstrap() {
 
     page = browserManager.getPage();
     const loginPage = new LoginPage(page);
+    const purchaseFlow = new PurchaseFlow(page);
 
     await loginPage.navigate(env.baseUrl);
     await loginPage.login(env.username, env.password);
+    const purchaseResult = await purchaseFlow.run(
+      { name: DEFAULT_PRODUCT_NAME },
+      DEFAULT_CHECKOUT_INFO,
+    );
 
-    console.log('Login executed successfully.');
+    console.log(
+      `Purchase completed successfully: product="${DEFAULT_PRODUCT_NAME}", confirmation="${purchaseResult.confirmationText}", completedAt="${purchaseResult.completedAt}"`,
+    );
   } catch (error) {
     // Set process exit code so CI/shell scripts can detect automation failure.
     console.error('Automation failed:', error);

@@ -45,8 +45,7 @@
       "@config/*": ["config/*"],
       "@core/*": ["core/*"],
       "@flows/*": ["flows/*"],
-      "@types/*": ["types/*"],
-      "@pages/*": ["pages/*"],
-    },
-  },
+      "@pages/*": ["pages/*"]
+    }
+  }
 }

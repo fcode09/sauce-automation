@@ -10,7 +10,9 @@
     "start": "node dist/index.js",
     "lint": "eslint --ext .ts src",
     "format": "prettier --write .",
-    "test": "ts-node -r tsconfig-paths/register src/tests/login.smoke.ts"
+    "test": "npm run test:login && npm run test:purchase",
+    "test:login": "ts-node -r tsconfig-paths/register src/tests/login.smoke.ts",
+    "test:purchase": "ts-node -r tsconfig-paths/register src/tests/purchase.smoke.ts"
   },
   "repository": {
     "type": "git",

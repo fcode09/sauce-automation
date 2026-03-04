@@ -24,6 +24,18 @@ export interface BrowserManagerOptions {
 export class BrowserManager {
   private browser: Browser | undefined;
   private page: Page | undefined;
+  private readonly defaultLaunchArgs = [
+    '--no-sandbox',
+    '--disable-setuid-sandbox',
+    '--disable-save-password-bubble',
+    '--disable-notifications',
+    '--disable-popup-blocking',
+    '--disable-extensions',
+    '--disable-sync',
+    '--password-store=basic',
+    '--use-mock-keychain',
+    '--disable-features=PasswordLeakDetection,PasswordManagerOnboarding,Translate,AutofillServerCommunication',
+  ];
 
   constructor(private readonly options: BrowserManagerOptions = {}) {}
 
@@ -36,11 +48,16 @@ export class BrowserManager {
       throw new Error('BrowserManager is already initialized.');
     }
 
+    // Always keep default anti-popup/automation-safe args even when custom args are provided.
+    const launchArgs = Array.from(
+      new Set([...this.defaultLaunchArgs, ...(this.options.args ?? [])]),
+    );
+
     this.browser = await puppeteer.launch({
       headless: this.options.headless ?? env.headless,
       slowMo: this.options.slowMo ?? env.slowMo,
       defaultViewport: this.options.defaultViewport ?? null,
-      args: this.options.args ?? ['--no-sandbox', '--disable-setuid-sandbox'],
+      args: launchArgs,
     });
 
     this.page = await this.browser.newPage();
